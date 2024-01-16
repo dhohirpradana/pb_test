@@ -12,18 +12,18 @@ app = Flask(__name__)
 def list_user():
     return list_user_handler()
 
-@app.route('/user/<id>', methods=['GET'])
-def detail_user(id):
-    return detail_user_handler(id)
+@app.route('/user/<user_id>', methods=['GET'])
+def detail_user(user_id):
+    return detail_user_handler(user_id)
 
 @app.route('/user', methods=['POST'])
 def create_user():
     return create_user_handler()
 
-@app.route('/user/<id>', methods=['PATCH'])
-def update_user(id):
-    return update_user_handler(id)
+@app.route('/user/<user_id>', methods=['PATCH'])
+def update_user(user_id):
+    return update_user_handler(user_id)
 
-@app.route('/user/<id>', methods=['DELETE'])
-def delete_user(id):
-    return delete_user_handler(id)
+@app.route('/user/<user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    return delete_user_handler(user_id)
