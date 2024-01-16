@@ -1,65 +1,70 @@
+import os
 import requests
 from flask import Flask, jsonify, request
+
 import dotenv
 dotenv.load_dotenv()
-import os
 
 PB_URL = os.environ.get("PB_URL")
 
 def list_user():
     try:
-        res = requests.get(f'{PB_URL}/api/collections/tes_bda/records')
+        body = request.get_json()
+        res = requests.get(f'{PB_URL}/api/collections/tes_bda/records', json=body, timeout=10)
         data = res.json()
-        return jsonify(data)
-    except Exception as e:
+        status_code = res.status_code
+
+        return jsonify(data), status_code
+    except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
-    
-def detail_user(id):
+
+def detail_user(user_id):
     try:
         body = request.get_json()
-        url = f'{PB_URL}/api/collections/tes_bda/records/{id}'
-        res = requests.get(url, json=body)
+        url = f'{PB_URL}/api/collections/tes_bda/records/{user_id}'
+        res = requests.get(url, json=body, timeout=10)
         data = res.json()
-        
+
         status_code = res.status_code
-        
+
         return jsonify(data), status_code
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
 def create_user():
     try:
         body = request.get_json()
-        res = requests.post('{PB_URL}/api/collections/tes_bda/records', json=body)
+        res = requests.post('{PB_URL}/api/collections/tes_bda/records', json=body, timeout=10)
         data = res.json()
         status_code = res.status_code
-        
+
         return jsonify(data), status_code
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
-    
-def update_user(id):
+
+def update_user(user_id):
     try:
         body = request.get_json()
-        url = f'{PB_URL}/api/collections/tes_bda/records/{id}'
-        
-        res = requests.patch(url, json=body)
-        data = res.json()
-        
+        url = f'{PB_URL}/api/collections/tes_bda/records/{user_id}'
+
+        res = requests.patch(url, json=body, timeout=10)
+        # data = res.json()
+
         status_code = res.status_code
         if status_code == 404:
             return jsonify({"error": "Not found"}), 404
-        
+
         return jsonify('User updated successfully'), 200
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
-    
-def delete_user(id):
+
+def delete_user(user_id):
     try:
-        res = requests.delete(f'{PB_URL}/api/collections/tes_bda/records/{id}')
+        res = requests.delete(f'{PB_URL}/api/collections/tes_bda/records/{user_id}', timeout=10)
         data = res.json()
         status_code = res.status_code
-        
+
         return jsonify(data), status_code
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
+    
